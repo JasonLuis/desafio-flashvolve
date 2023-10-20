@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { quasar } from '@quasar/vite-plugin';
-
 export default defineNuxtConfig({
   ssr: false,
   srcDir: 'src/',
@@ -35,4 +34,4 @@ export default defineNuxtConfig({
       })
     ]
   }
-})
+});

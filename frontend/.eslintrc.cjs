@@ -8,10 +8,9 @@ module.exports = {
   parserOptions: {
     parser: '@typescript-eslint/parser'
   },
-  extends: [
-    '@nuxtjs/eslint-config-typescript',
-    'plugin:prettier/recommended'
-  ],
+  extends: ['@nuxtjs/eslint-config-typescript', 'plugin:prettier/recommended'],
   plugins: [],
-  rules: {}
+  rules: {
+    'vue/valid-v-slot': 'off'
+  }
 };
