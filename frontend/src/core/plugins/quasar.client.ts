@@ -1,4 +1,3 @@
-import { defineNuxtPlugin } from '#app'
 import {
   Quasar,
   QPage,
@@ -23,9 +22,10 @@ import {
   QAvatar,
   QInput,
   QSelect
-} from 'quasar'
+} from 'quasar';
+import { defineNuxtPlugin } from '#app';
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(nuxtApp => {
   const quasarUserOptions = {
     components: {
       QPage,
@@ -52,7 +52,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       QSelect
     },
     plugins: {}
-  }
+  };
 
-  nuxtApp.vueApp.use(Quasar, quasarUserOptions)
-})
+  nuxtApp.vueApp.use(Quasar, quasarUserOptions);
+});

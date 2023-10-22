@@ -1,242 +1,153 @@
+import axios from 'axios';
 import { getCompanyAcronym } from '~/app/core/base/companyAcronym';
 import { getCompId } from '~/app/core/base/compId';
 import { getStoreAcronym } from '~/app/core/base/storeAcronym';
 
-
 interface GetParams {
-    url: string;
-    queryString?: string;
-    headers?: Record<string, string>;
-    options?: object;
-    path?: any;
+  url: string;
+  queryString?: string;
+  headers?: object;
+  options?: object;
+  path?: any;
 }
 
 interface PostParams {
-    url?: string;
-    queryString?: string;
-    headers?: Record<string, string>;
-    options?: object;
-    body?: any;
-    path?: any;
+  url?: string;
+  queryString?: string;
+  headers?: object;
+  options?: object;
+  body?: any;
+  path?: any;
 }
 
 export interface IHttpAdapter {
-    get(p: GetParams): Promise<any>;
-    post(p: PostParams): Promise<any>;
-    request(p: any): Promise<any>;
-    put(p: PostParams): Promise<any>;
-    patch(p?: PostParams): Promise<any>;
-    delete(p?: PostParams): Promise<any>;
+  get(p: GetParams): Promise<any>;
+  post(p: PostParams): Promise<any>;
+  request(p: any): Promise<any>;
+  put(p: PostParams): Promise<any>;
+  patch(p?: PostParams): Promise<any>;
+  delete(p?: PostParams): Promise<any>;
 }
 
 export class HttpAdapter implements IHttpAdapter {
-    private baseUrl: string | undefined;
-    private initialHeaders: Record<string, string>;
+  private baseUrl: string | undefined;
+  private initialHeaders: object;
 
-    constructor(baseUrl?: string, initialHeaders?: Record<string, string>) {
-        this.baseUrl = baseUrl ?? undefined;
-        this.initialHeaders = initialHeaders || {};
+  constructor(baseUrl?: string, initialHeaders?: object) {
+    this.baseUrl = baseUrl ?? undefined;
+    this.initialHeaders = initialHeaders || {};
+  }
+
+  put(p: PostParams): Promise<any> {
+    const qs = p.queryString ? `?${p.queryString}` : '';
+    const urlCall = this.baseUrl
+      ? `${this.baseUrl}${p.path}${qs}`
+      : `${p.url}${qs}`;
+    let headers = { ...this.initialHeaders, ...p.headers };
+
+    if (getCompanyAcronym()) {
+      headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
+    }
+    if (getStoreAcronym()) {
+      headers = { ...headers, StoreAcronym: getStoreAcronym() };
+    }
+    if (getCompId()) {
+      headers = { ...headers, CompId: getCompId() };
     }
 
-    async put(p: PostParams): Promise<any> {
-        const qs = p.queryString ? `?${p.queryString}` : '';
-        const urlCall = this.baseUrl
-            ? `${this.baseUrl}${p.path}${qs}`
-            : `${p.url}${qs}`;
-        let headers = { ...this.initialHeaders, ...p.headers };
+    return axios.put(urlCall, p.body, {
+      headers,
+      timeout: 300000,
+      ...p.options
+    });
+  }
 
-        if (getCompanyAcronym()) {
-            headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
-        }
-        if (getStoreAcronym()) {
-            headers = { ...headers, StoreAcronym: getStoreAcronym() };
-        }
-        if (getCompId()) {
-            headers = { ...headers, CompId: getCompId() };
-        }
+  post(p: PostParams): Promise<any> {
+    const qs = p.queryString ? `?${p.queryString}` : '';
+    const urlCall = this.baseUrl
+      ? `${this.baseUrl}${p.path}${qs}`
+      : `${p.url}${qs}`;
+    let headers = { ...this.initialHeaders, ...p.headers };
 
-        const response = await fetch(urlCall, {
-            method: 'PUT',
-            headers,
-            body: JSON.stringify(p.body),
-            ...p.options,
-        });
-
-        const timeoutPromise = new Promise<any>((_, reject) => {
-            setTimeout(() => {
-                reject(new Error('Timeout exceeded'));
-            }, 300000);
-        });
-
-        return Promise.race([response.json(), timeoutPromise]);
+    if (getCompanyAcronym()) {
+      headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
     }
 
-    async post(p: PostParams): Promise<any> {
-        const qs = p.queryString ? `?${p.queryString}` : '';
-        const urlCall = this.baseUrl
-            ? `${this.baseUrl}${p.path}${qs}`
-            : `${p.url}${qs}`;
-        let headers = { ...this.initialHeaders, ...p.headers };
-
-        if (getCompanyAcronym()) {
-            headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
-        }
-
-        if (getStoreAcronym()) {
-            headers = { ...headers, StoreAcronym: getStoreAcronym() };
-        }
-        if (getCompId()) {
-            headers = { ...headers, CompId: getCompId() };
-        }
-
-        const response = await fetch(urlCall, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(p.body),
-            ...p.options,
-        });
-
-        const timeoutPromise = new Promise<any>((_, reject) => {
-            setTimeout(() => {
-                reject(new Error('Timeout exceeded'));
-            }, 300000);
-        });
-
-        return Promise.race([response.json(), timeoutPromise]);
+    if (getStoreAcronym()) {
+      headers = { ...headers, StoreAcronym: getStoreAcronym() };
+    }
+    if (getCompId()) {
+      headers = { ...headers, CompId: getCompId() };
     }
 
-    async get(p: GetParams): Promise<any> {
-        const qs = p.queryString ? `?${p.queryString}` : '';
-        const urlCall = this.baseUrl
-            ? `${this.baseUrl}${p.path}${qs}`
-            : `${p.url}${qs}`;
-        const headers = { ...this.initialHeaders, ...p.headers };
+    return axios.post(urlCall, p.body, {
+      headers,
+      timeout: 300000,
+      ...p.options
+    });
+  }
 
-        const response = await fetch(urlCall, {
-            method: 'GET',
-            headers,
-            ...p.options,
-        });
+  get(p: GetParams): Promise<any> {
+    const qs = p.queryString ? `?${p.queryString}` : '';
+    const urlCall = this.baseUrl
+      ? `${this.baseUrl}${p.path}${qs}`
+      : `${p.url}${qs}`;
+    const headers = { ...this.initialHeaders, ...p.headers };
+    return axios.get(urlCall, { headers, ...p.options });
+  }
 
-        return response.json();
+  request(p: any): Promise<any> {
+    return axios.request(p);
+  }
+
+  delete(p: PostParams): Promise<any> {
+    const qs = p.queryString ? `?${p.queryString}` : '';
+    const urlCall = this.baseUrl
+      ? `${this.baseUrl}${p.path}${qs}`
+      : `${p.url}${qs}`;
+    let headers = { ...this.initialHeaders, ...p.headers };
+
+    if (getCompanyAcronym()) {
+      headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
     }
 
-    async request(p: any): Promise<any> {
-        const response = await fetch(p.url, {
-            method: p.method,
-            headers: p.headers,
-            body: p.body,
-            timeout: 300000,
-            ...p.options,
-        });
-
-        return response.json();
+    if (getStoreAcronym()) {
+      headers = { ...headers, StoreAcronym: getStoreAcronym() };
+    }
+    if (getCompId()) {
+      headers = { ...headers, CompId: getCompId() };
     }
 
-    async delete(p: PostParams): Promise<any> {
-        const qs = p.queryString ? `?${p.queryString}` : '';
-        const urlCall = this.baseUrl
-            ? `${this.baseUrl}${p.path}${qs}`
-            : `${p.url}${qs}`;
-        let headers = { ...this.initialHeaders, ...p.headers };
+    return axios.delete(urlCall, {
+      data: p.body,
+      headers,
+      timeout: 300000,
+      ...p.options
+    });
+  }
 
-        if (getCompanyAcronym()) {
-            headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
-        }
+  patch(p: PostParams): Promise<any> {
+    const qs = p.queryString ? `?${p.queryString}` : '';
+    const urlCall = this.baseUrl
+      ? `${this.baseUrl}${p.path}${qs}`
+      : `${p.url}${qs}`;
+    let headers = { ...this.initialHeaders, ...p.headers };
 
-        if (getStoreAcronym()) {
-            headers = { ...headers, StoreAcronym: getStoreAcronym() };
-        }
-        if (getCompId()) {
-            headers = { ...headers, CompId: getCompId() };
-        }
-
-        const response = await fetch(urlCall, {
-            method: 'DELETE',
-            headers,
-            body: JSON.stringify(p.body),
-            ...p.options,
-        });
-
-        const timeoutPromise = new Promise<any>((_, reject) => {
-            setTimeout(() => {
-                reject(new Error('Timeout exceeded'));
-            }, 300000);
-        });
-
-        return Promise.race([response.json(), timeoutPromise]);
+    if (getCompanyAcronym()) {
+      headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
     }
 
-    async patch(p: PostParams): Promise<any> {
-        const qs = p.queryString ? `?${p.queryString}` : '';
-        const urlCall = this.baseUrl
-            ? `${this.baseUrl}${p.path}${qs}`
-            : `${p.url}${qs}`;
-        let headers = { ...this.initialHeaders, ...p.headers };
-
-        if (getCompanyAcronym()) {
-            headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
-        }
-
-        if (getStoreAcronym()) {
-            headers = { ...headers, StoreAcronym: getStoreAcronym() };
-        }
-        if (getCompId()) {
-            headers = { ...headers, CompId: getCompId() };
-        }
-
-        const response = await fetch(urlCall, {
-            method: 'PATCH',
-            headers,
-            body: JSON.stringify(p.body),
-            ...p.options,
-        });
-
-        const timeoutPromise = new Promise<any>((_, reject) => {
-            setTimeout(() => {
-                reject(new Error('Timeout exceeded'));
-            }, 300000);
-        });
-
-        return Promise.race([response.json(), timeoutPromise]);
+    if (getStoreAcronym()) {
+      headers = { ...headers, StoreAcronym: getStoreAcronym() };
     }
+    if (getCompId()) {
+      headers = { ...headers, CompId: getCompId() };
+    }
+
+    return axios.patch(urlCall, p.body, {
+      headers,
+      timeout: 300000,
+      ...p.options
+    });
+  }
 }
-
-// delete(p: PostParams): Promise<any> {
-//   const qs = p.queryString ? `?${p.queryString}` : '';
-//   const urlCall = this.baseUrl
-//     ? `${this.baseUrl}${p.path}${qs}`
-//     : `${p.url}${qs}`;
-//   let headers = { ...this.initialHeaders, ...p.headers };
-//   if (getCompanyAcronym()) {
-//     headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
-//   }
-//   return axios.delete(urlCall, {
-//     data: p.body,
-//     headers,
-//     timeout: 300000,
-//     ...p.options,
-//   });
-// }
-
-// patch(p: PostParams): Promise<any> {
-//   const qs = p.queryString ? `?${p.queryString}` : '';
-//   const urlCall = this.baseUrl
-//     ? `${this.baseUrl}${p.path}${qs}`
-//     : `${p.url}${qs}`;
-//   let headers = { ...this.initialHeaders, ...p.headers };
-//   if (getCompanyAcronym()) {
-//     headers = { ...headers, CompanyAcronym: getCompanyAcronym() };
-//   }
-//   if (getStoreAcronym()) {
-//     headers = { ...headers, StoreAcronym: getStoreAcronym() };
-//   }
-//   if (getCompId()) {
-//     headers = { ...headers, CompId: getCompId() };
-//   }
-//   return axios.patch(urlCall, p.body, {
-//     headers,
-//     timeout: 300000,
-//     ...p.options,
-//   });
-// }

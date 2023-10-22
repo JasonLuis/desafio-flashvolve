@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { quasar } from '@quasar/vite-plugin';
+/* eslint-disable @typescript-eslint/no-var-requires */
+require('dotenv').config({ path: 'config/.env' });
 export default defineNuxtConfig({
   ssr: false,
   srcDir: 'src/',
@@ -7,7 +9,8 @@ export default defineNuxtConfig({
     pages: 'pages',
     assets: 'core/assets',
     layouts: 'core/layouts',
-    public: 'core/public'
+    public: 'core/public',
+    middleware: 'core/middleware'
   },
   components: {
     dirs: ['core/components']
@@ -24,6 +27,19 @@ export default defineNuxtConfig({
   imports: {
     dirs: ['~/core/composables/**']
   },
+  runtimeConfig: {
+    public: {
+      API_BASE_URL: process.env.API_BASE_URL
+    }
+  },
+  modules: [
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore']
+      }
+    ]
+  ],
   vite: {
     plugins: [
       /* vue({

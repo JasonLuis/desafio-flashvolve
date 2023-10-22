@@ -5,8 +5,8 @@
     </q-card-section>
     <q-card-section class="row justify-center">
       <q-input
-        v-model="user"
-        label="User"
+        v-model="login"
+        label="Login"
         lazy-rules
         :rules="[val => (val && val.length > 0) || 'Please type something']"
       >
@@ -37,8 +37,8 @@
       <q-btn
         text-color="black"
         label="Entrar"
-        :disable="!(user && password)"
-        @click="auth({ user, password })"
+        :disable="!(login && password)"
+        @click="auth({ login, password })"
       />
     </q-card-section>
   </q-card>
@@ -51,7 +51,7 @@ const img = new URL(
   import.meta.url
 ).href;
 
-const user = ref<undefined | string>(undefined);
+const login = ref<undefined | string>(undefined);
 const password = ref<undefined | string>(undefined);
 const iconUser = new URL(`../../assets/icons/user-icon.svg`, import.meta.url)
   .href;
@@ -60,8 +60,11 @@ const isPwd = ref<boolean>(true);
 
 const emit = defineEmits(['authOperator']);
 
-function auth(login: { user?: string; password?: string }) {
-  emit('authOperator', login);
+function auth(input: { login?: string; password?: string }) {
+  const req = {
+    input
+  };
+  emit('authOperator', req);
 }
 </script>
 
