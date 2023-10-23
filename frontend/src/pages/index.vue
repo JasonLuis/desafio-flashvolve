@@ -2,7 +2,7 @@
   <div class="container">
     <div class="full-height">
       <div class="full-height login">
-        <UiLoginCard @auth-operator="auth" />
+        <UiLoginCard :loading="loading" @auth-operator="auth" />
       </div>
     </div>
   </div>
@@ -15,7 +15,7 @@ import { AuthOperatorDTO } from '~/app/modules/login/use-cases/Auth/AuthOperator
 import { useAuthStore } from '~/store/authenticate';
 
 const { authOperator } = useAuthStore();
-const { authenticated } = storeToRefs(useAuthStore());
+const { authenticated, loading } = storeToRefs(useAuthStore());
 
 const router = useRouter();
 const auth = async (req: AuthOperatorDTO.Request) => {

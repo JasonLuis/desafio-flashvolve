@@ -38,6 +38,7 @@
         text-color="black"
         label="Entrar"
         :disable="!(login && password)"
+        :loading="loading"
         @click="auth({ login, password })"
       />
     </q-card-section>
@@ -45,11 +46,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+
 const img = new URL(
   `../../assets/images/central-de-atendimento.png`,
   import.meta.url
 ).href;
+
+const props = defineProps<{
+  loading: boolean;
+}>();
 
 const login = ref<undefined | string>(undefined);
 const password = ref<undefined | string>(undefined);
@@ -57,7 +63,6 @@ const iconUser = new URL(`../../assets/icons/user-icon.svg`, import.meta.url)
   .href;
 
 const isPwd = ref<boolean>(true);
-
 const emit = defineEmits(['authOperator']);
 
 function auth(input: { login?: string; password?: string }) {
@@ -66,6 +71,10 @@ function auth(input: { login?: string; password?: string }) {
   };
   emit('authOperator', req);
 }
+
+const loading = computed(() => {
+  return props.loading;
+});
 </script>
 
 <style scoped lang="scss">
