@@ -11,11 +11,6 @@ export class OperatorsRoutes {
 
   getRoutes() {
     this.router.post(
-      "/",
-      this.operatorsController.auth.bind(this.operatorsController)
-    );
-
-    this.router.post(
       "/create",
       this.operatorsController.create.bind(this.operatorsController)
     );
