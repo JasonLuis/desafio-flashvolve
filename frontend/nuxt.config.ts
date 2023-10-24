@@ -38,7 +38,8 @@ export default defineNuxtConfig({
       {
         autoImports: ['defineStore']
       }
-    ]
+    ],
+    'nuxt3-socket.io'
   ],
   vite: {
     plugins: [

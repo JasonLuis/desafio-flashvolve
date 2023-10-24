@@ -20,11 +20,25 @@ definePageMeta({
 
 const image = new URL(`../core/assets/images/bot-image.png`, import.meta.url)
   .href;
-<<<<<<< HEAD
-=======
 
 const socket = useSocket();
->>>>>>> d27820e4aa064d2bbb3071fd638923429a181c43
+const io = useIO();
+const socket2 = io('http://localhost:3000');
+const connected = ref<boolean>(false);
+
+onMounted(() => {
+  socket.on('connect', () => {
+    connected.value = socket.connected;
+  });
+
+  socket2.on('disconnect', () => {
+    connected.value = socket.connected;
+  });
+});
+
+watch(connected, (newX) => {
+  console.log(`x is ${newX}`);
+});
 </script>
 
 <style scoped lang="scss">
@@ -52,8 +66,4 @@ p {
 .q-input {
   width: 80%;
 }
-<<<<<<< HEAD
 </style>
-=======
-</style>
->>>>>>> d27820e4aa064d2bbb3071fd638923429a181c43
