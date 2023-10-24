@@ -20,7 +20,10 @@ definePageMeta({
 
 const image = new URL(`../core/assets/images/bot-image.png`, import.meta.url)
   .href;
+
+const socket = useSocket();
 </script>
+
 <style scoped lang="scss">
 .q-img {
   height: 70px;

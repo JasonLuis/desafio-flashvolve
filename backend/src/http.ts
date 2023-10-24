@@ -1,6 +1,8 @@
 import cors from "cors";
 import express, { Application, Request, Response, NextFunction } from "express";
 import { OperatorsRoutes } from "./routes/operators.routes";
+import http from "http";
+import { Server } from "socket.io";
 
 const app: Application = express();
 app.use(cors());
@@ -24,4 +26,8 @@ app.use(
   }
 );
 
-app.listen(3000, () => console.log("Server is running"));
+const serverHttp = http.createServer(app);
+
+const io = new Server(serverHttp);
+
+export { serverHttp, io }
