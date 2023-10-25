@@ -51,15 +51,15 @@
         </q-item>
       </q-list>
     </q-drawer>
-    <q-drawer
+    <!-- <q-drawer
       v-model="leftDrawerOpen"
       :width="180"
       show-if-above
       side="right"
       bordered
     >
-      <!-- drawer content -->
-    </q-drawer>
+       drawer conten
+    </q-drawer> -->
     <q-page-container>
       <router-view />
     </q-page-container>

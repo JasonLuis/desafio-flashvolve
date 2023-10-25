@@ -10,7 +10,7 @@
         lazy-rules
         :rules="[val => (val && val.length > 0) || 'Please type something']"
       >
-        <template #prepend>
+        <template #append>
           <q-icon :name="`img: ${iconUser}`"></q-icon>
         </template>
       </q-input>
@@ -23,7 +23,7 @@
         lazy-rules
         :rules="[val => (val && val.length > 0) || 'Please type something']"
       >
-        <template #prepend>
+        <template #append>
           <q-icon
             :name="isPwd ? 'visibility_off' : 'visibility'"
             class="cursor-pointer"
