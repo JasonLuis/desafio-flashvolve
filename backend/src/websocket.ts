@@ -1,28 +1,54 @@
 import TelegramBot from "node-telegram-bot-api";
 import { io } from "./http";
+import { AuthMiddleware } from "./middlewares/AuthMiddleware";
+import { verify } from "jsonwebtoken";
+import { getOperatorId } from "./helper/helper";
+import { CustomerService } from "./services/CustomerService";
+import { ChatService } from "./services/ChatService";
 const token = process.env.BOT_TOKEN;
 
 if (!token) {
   throw new Error("Missing Bot Token");
 }
 
+const customerService = new CustomerService();
+const chatService = new ChatService();
+
 const bot = new TelegramBot(token, { polling: true });
-bot.on("message", (msg) => {
+bot.on("message", async (msg) => {
   const customer = msg.from?.first_name;
-  const chatId = msg.chat.id;
+  const chatId = `${msg.chat.id}`;
   const messageText = msg.text;
-  console.log("teste", messageText);
+  
+  await customerService.create(customer, chatId);
+
   io.emit("message", {
     chatId: chatId,
     message: messageText,
     customer: customer
   });
+
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
+
+  const operatorToken = socket.handshake.auth.token;
+  
+  if(!operatorToken) {
+    throw new Error("Invalid token"); 
+  }
+  const operatorId = getOperatorId(operatorToken);
   socket.on("suport", async (data, callback) => {
+    await chatService.create({
+      idTelegram: data.chatId,
+      text: data.msgText,
+      operatorId: operatorId as string,
+      sent: true,
+    })
     await bot.sendMessage(data.chatId, data.msgText);
   });
 });
+
+
 
 

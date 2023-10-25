@@ -11,8 +11,27 @@ datasource db {
 }
 
 model Operators {
-  id       String @id @default(uuid())
-  login    String @unique
+  id       String     @id @default(uuid())
+  login    String     @unique
   password String
   name     String
+  messages Messages[]
+}
+
+model Customers {
+  id         String     @id @default(uuid())
+  name       String
+  idTelegram String     @unique
+  Messages   Messages[]
+}
+
+model Messages {
+  id           String    @id @default(uuid())
+  operators_id String    @default("")
+  idTelegram  String    @default("")
+  operators    Operators @relation(fields: [operators_id], references: [id])
+  customers    Customers @relation(fields: [idTelegram], references: [idTelegram])
+  text         String
+  dtMessage    DateTime
+  sent         Boolean   @default(false)
 }

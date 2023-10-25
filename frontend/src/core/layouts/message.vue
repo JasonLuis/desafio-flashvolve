@@ -14,7 +14,7 @@
           </q-avatar>
         </q-item-section>
         <q-item-section>
-          <q-item-label>Mary</q-item-label>
+          <q-item-label>{{ name }}</q-item-label>
           <q-item-label caption class="text-black">Operador</q-item-label>
         </q-item-section>
       </q-item>
@@ -68,6 +68,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useAuthStore } from '~/store/authenticate';
+const { name } = storeToRefs(useAuthStore());
 
 const leftDrawerOpen = ref<boolean>(false);
 </script>

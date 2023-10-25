@@ -2,7 +2,7 @@
   <q-chat-message
     :name="props.name"
     name-html
-    avatar="https://cdn.quasar.dev/img/avatar5.jpg"
+    :avatar="avatar"
     :text="[props.message]"
     :stamp="props.stamp"
     :sent="!props.sent"
@@ -18,13 +18,19 @@ const props = withDefaults(
     message: string;
     stamp: string;
     sent?: boolean;
+    avatar?: string;
   }>(),
   {
-    sent: false
+    sent: false,
+    avatar: '../../assets/images/bot-image.png'
   }
 );
 
 const color = computed(() => {
   return props.sent ? 'amber-7' : 'primary';
+});
+
+const avatar = computed(() => {
+  return new URL(props.avatar, import.meta.url).href;
 });
 </script>

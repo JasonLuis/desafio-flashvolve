@@ -5,7 +5,9 @@ import { AuthOperatorDTO } from '~/app/modules/login/use-cases/Auth/AuthOperator
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
-    loading: false
+    loading: false,
+    name: '',
+    tokenkey: ''
   }),
   actions: {
     async authOperator(req: AuthOperatorDTO.Request) {
@@ -21,12 +23,14 @@ export const useAuthStore = defineStore('auth', {
         const token = useCookie('token-key');
         token.value = res.value.getValue().token;
         this.authenticated = true;
+        this.name = res.value.getValue().user.name;
       }
     },
     logout() {
       const token = useCookie('token-key');
       this.authenticated = false;
       token.value = undefined;
+      this.name = '';
     }
   }
 });
