@@ -17,8 +17,8 @@ Siga estas etapas para configurar o projeto:
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seurepositorio/seuprojeto.git
-cd seuprojeto
+git clone git@github.com:JasonLuis/desafio-flashvolve.git
+cd backend
 ```
 
 2. Instale as dependências do projeto:
@@ -61,9 +61,9 @@ Sinta-se à vontade para contribuir para este projeto. Abra uma issue ou envie u
 
 ---
 
-# Frontend do Projeto XYZ
+# Frontend do Projeto Chat Message
 
-Este é o repositório do frontend do Projeto XYZ. O frontend é construído com tecnologias web modernas e interage com o backend para fornecer uma experiência de usuário incrível.
+Este é o repositório do frontend do Projeto Chat Message. O frontend é construído com tecnologias web modernas e interage com o backend para fornecer uma experiência de usuário incrível.
 
 ## Requisitos
 
@@ -79,8 +79,8 @@ Siga estas etapas para configurar o projeto do frontend:
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seurepositorio/frontend-xyz.git
-cd frontend-xyz
+git clone git@github.com:JasonLuis/desafio-flashvolve.git
+cd frontend
 ```
 
 2. Instale as dependências do projeto:
