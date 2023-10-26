@@ -1,6 +1,7 @@
 import { CUstomerRepository } from "../repositories/CustomerRepository";
 
 export class CustomerService {
+  
   private customerRepository: CUstomerRepository;
 
   constructor() {
@@ -15,6 +16,12 @@ export class CustomerService {
     }
 
     const res = await this.customerRepository.create(name, idTelegram);
+
+    return res;
+  }
+
+  async getAll() {
+    const res = await this.customerRepository.getAll();
 
     return res;
   }

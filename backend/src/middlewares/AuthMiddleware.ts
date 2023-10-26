@@ -16,7 +16,7 @@ export class AuthMiddleware {
         }
     
         const [, token] = authHeader.split(" ");
-        let secretKey: string | undefined = process.env.ACCESS_KEY_TOKEN;
+        let secretKey: string | undefined = process.env.KEY;
         if (!secretKey) {
             throw new Error("There is no token key");
         }

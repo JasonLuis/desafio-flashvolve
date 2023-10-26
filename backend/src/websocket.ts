@@ -1,7 +1,5 @@
 import TelegramBot from "node-telegram-bot-api";
 import { io } from "./http";
-import { AuthMiddleware } from "./middlewares/AuthMiddleware";
-import { verify } from "jsonwebtoken";
 import { getOperatorId } from "./helper/helper";
 import { CustomerService } from "./services/CustomerService";
 import { ChatService } from "./services/ChatService";
@@ -14,6 +12,8 @@ if (!token) {
 const customerService = new CustomerService();
 const chatService = new ChatService();
 
+let operatorId: string;
+
 const bot = new TelegramBot(token, { polling: true });
 bot.on("message", async (msg) => {
   const customer = msg.from?.first_name;
@@ -21,7 +21,12 @@ bot.on("message", async (msg) => {
   const messageText = msg.text;
   
   await customerService.create(customer, chatId);
-
+  await chatService.create({
+    idTelegram: chatId,
+    operatorId: operatorId,
+    text: `${messageText}`,
+    sent: false,
+  });
   io.emit("message", {
     chatId: chatId,
     message: messageText,
@@ -37,14 +42,14 @@ io.on("connection", async (socket) => {
   if(!operatorToken) {
     throw new Error("Invalid token"); 
   }
-  const operatorId = getOperatorId(operatorToken);
+  operatorId = getOperatorId(operatorToken) as string;
   socket.on("suport", async (data, callback) => {
     await chatService.create({
       idTelegram: data.chatId,
       text: data.msgText,
-      operatorId: operatorId as string,
+      operatorId: operatorId,
       sent: true,
-    })
+    });
     await bot.sendMessage(data.chatId, data.msgText);
   });
 });

@@ -27,9 +27,9 @@ model Customers {
 
 model Messages {
   id           String    @id @default(uuid())
-  operators_id String    @default("")
+  operators_id String?  
   idTelegram  String    @default("")
-  operators    Operators @relation(fields: [operators_id], references: [id])
+  operators    Operators? @relation(fields: [operators_id], references: [id])
   customers    Customers @relation(fields: [idTelegram], references: [idTelegram])
   text         String
   dtMessage    DateTime

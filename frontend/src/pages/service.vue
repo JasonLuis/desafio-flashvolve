@@ -91,6 +91,7 @@ onMounted(() => {
 
 const sendMessage = () => {
   if (connected.value && idTelegram.value !== undefined && messageText.value) {
+    console.log('telegramId', idTelegram.value);
     socket.emit('suport', {
       chatId: idTelegram.value,
       msgText: messageText.value

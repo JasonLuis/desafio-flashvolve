@@ -9,7 +9,7 @@ export class ChatService {
         this.chatRepository = new ChatRepository();
     }
 
-    async create({ operatorId, idTelegram, text, sent }: Chat.Create) {
+    async create({ operatorId=undefined, idTelegram, text, sent }: Chat.Create) {
         const res = await this.chatRepository.create({
             idTelegram,
             operatorId,
@@ -17,6 +17,11 @@ export class ChatService {
             sent
         });
 
+        return res;
+    }
+
+    async getMessages(operatorId: string, idTelegram: string) {
+        const res = await this.chatRepository.getMessages(operatorId, idTelegram);
         return res;
     }
 }
