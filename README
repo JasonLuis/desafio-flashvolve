@@ -118,15 +118,4 @@ yarn build
 ```
 
 Isso criará os arquivos otimizados para produção na pasta `build`.
-
-## Contribuição
-
-Sinta-se à vontade para contribuir para este projeto. Abra issues ou envie pull requests com melhorias ou correções.
-
-## Licença
-
-Este projeto é licenciado sob a [Sua Licença Aqui]. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
 ---
-
-Certifique-se de substituir "seurepositorio/seuprojeto" e outras informações específicas do seu projeto no README. Além disso, adicione sua própria licença no final do README, se aplicável.
